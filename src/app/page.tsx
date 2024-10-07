@@ -2,35 +2,13 @@ import Image from "next/image";
 import svg_webapp from "@/public/webapp.svg";
 import svg_skeletonBg from "@/public/skeleton_bg.svg";
 import svg_bottombg from "@/public/bottomBG.svg";
-import localFont from "next/font/local";
 import Link from "next/link";
 import svg_github from "@/public/icons/github.svg";
 import svg_gmail from "@/public/icons/gmail.svg";
 import svg_telegram from "@/public/icons/telegram.svg";
 import svg_facebook from "@/public/icons/facebook.svg";
 import SignIn_btn from "@/components/ui/signin_btn";
-
-const sinera = localFont({
-  src: "./fonts/Sinera.woff",
-  variable: "--font-sinera",
-  weight: "100 900",
-});
-
-const geistSans = localFont({
-  src: "./fonts/GeistVF.woff",
-  variable: "--font-geist-sans",
-  weight: "100 900",
-});
-
-const geistMono = localFont({
-  src: "./fonts/GeistMonoVF.woff",
-  variable: "--font-geist-mono",
-  weight: "100 900",
-});
-
-const Roboto = localFont({
-  src: "./fonts/Roboto-Regular.ttf",
-});
+import { geistMono, geistSans, roboto, sinera } from "./fontProvider";
 
 export default function Home() {
   return (
@@ -144,7 +122,7 @@ export default function Home() {
       </div>
 
       <div className="group/timeline mb-36 flex w-96 flex-col items-center justify-center overflow-hidden rounded-xl bg-gradient-to-br from-cyan-500 via-sky-300 to-blue-400 transition-all">
-        <div className="absolute z-30 min-h-full w-96 bg-black bg-opacity-0" />
+        <div className="absolute z-30 min-h-[32rem] w-96 bg-black bg-opacity-0" />
         <div
           className={`flex w-full scale-[.993] flex-col justify-items-center gap-y-5 rounded-xl bg-slate-200 px-10 pb-5 text-center text-black transition-all ${geistMono.className}`}
         >
@@ -260,7 +238,7 @@ export default function Home() {
                 className="peer pt-2"
               />
               <p
-                className={`${Roboto.className} -translate-y-10 opacity-0 transition-all group-hover:translate-y-2 group-hover:opacity-100 group-hover:delay-200 peer-hover:text-blue-400`}
+                className={`${roboto.className} -translate-y-10 opacity-0 transition-all group-hover:translate-y-2 group-hover:opacity-100 group-hover:delay-200 peer-hover:text-blue-400`}
               >
                 Facebook
               </p>
@@ -278,7 +256,7 @@ export default function Home() {
                 className="peer pt-2"
               />
               <p
-                className={`${Roboto.className} -translate-y-10 opacity-0 transition-all group-hover:translate-y-2 group-hover:opacity-100 group-hover:delay-100 peer-hover:text-white`}
+                className={`${roboto.className} -translate-y-10 opacity-0 transition-all group-hover:translate-y-2 group-hover:opacity-100 group-hover:delay-100 peer-hover:text-white`}
               >
                 GitHub
               </p>
@@ -296,7 +274,7 @@ export default function Home() {
                 className="peer pt-2"
               />
               <p
-                className={`${Roboto.className} -translate-y-10 opacity-0 transition-all group-hover:translate-y-2 group-hover:opacity-100 group-hover:delay-100 peer-hover:text-red-500`}
+                className={`${roboto.className} -translate-y-10 opacity-0 transition-all group-hover:translate-y-2 group-hover:opacity-100 group-hover:delay-100 peer-hover:text-red-500`}
               >
                 Mail
               </p>
@@ -314,7 +292,7 @@ export default function Home() {
                 className="peer pt-2"
               />
               <p
-                className={`${Roboto.className} -translate-y-10 opacity-0 transition-all group-hover:translate-y-2 group-hover:opacity-100 group-hover:delay-200 peer-hover:text-sky-500`}
+                className={`${roboto.className} -translate-y-10 opacity-0 transition-all group-hover:translate-y-2 group-hover:opacity-100 group-hover:delay-200 peer-hover:text-sky-500`}
               >
                 Telegram
               </p>
