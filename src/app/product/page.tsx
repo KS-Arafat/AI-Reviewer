@@ -1,5 +1,5 @@
 import Link from "next/link";
-import ProductCard from "./ProductCard";
+import ProductCard from "@/components/ProductCard";
 import { mistergrape } from "../fontProvider";
 
 interface Product {
@@ -52,6 +52,7 @@ export function ProductGrid() {
             strokeLinejoin="round"
             className="lucide lucide-house mx-auto h-12 w-12 transition-all ease-in-out hover:stroke-amber-300"
           >
+            <title>Home</title>
             <path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8" />
             <path d="M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
           </svg>
@@ -75,6 +76,7 @@ export function ProductGrid() {
             strokeLinejoin="round"
             className="lucide lucide-user-round-search relative right-0 h-12 w-12"
           >
+            <title>Profile</title>
             <circle cx="10" cy="8" r="5" />
             <path d="M2 21a8 8 0 0 1 10.434-7.62" />
             <circle cx="18" cy="18" r="3" />
