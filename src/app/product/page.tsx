@@ -35,7 +35,7 @@ const products: Product[] = [
   },
 ];
 
-export function ProductGrid() {
+const ProductGrid = () => {
   return (
     <div className="">
       <div className="grid h-20 min-w-full grid-cols-3 rounded-b-md bg-gradient-to-br from-sky-500 via-blue-300 to-cyan-300 shadow-lg shadow-sky-200">
@@ -93,6 +93,6 @@ export function ProductGrid() {
       </div>
     </div>
   );
-}
+};
 
 export default ProductGrid;

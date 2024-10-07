@@ -26,7 +26,6 @@ const mistergrape = localFont({
   src: "./fonts/MisterGrape.otf",
   variable: "--font-mister-grape",
   weight: "100 900",
-  preload: true,
 });
 
 export { sinera, geistMono, geistSans, roboto, mistergrape };
