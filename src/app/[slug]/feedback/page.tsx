@@ -1,4 +1,4 @@
-import { mistergrape, sinera } from "@/app/fontProvider";
+import { geistMono, mistergrape, sinera } from "@/app/fontProvider";
 import Comments from "@/components/Comments";
 import Image from "next/image";
 import Link from "next/link";
@@ -35,6 +35,16 @@ const Feedbacks = ({ params }: { params: { slug: string } }) => {
 
   return (
     <div className="flex flex-col items-center justify-center">
+      <Link
+        href={`/${params.slug}/aireview`}
+        className="fixed bottom-20 right-20 flex h-24 w-24 flex-col items-center justify-center rounded-full border-b border-r border-orange-300 bg-orange-200 text-center font-bold drop-shadow-xl transition-all hover:bg-gradient-to-br hover:from-orange-300 hover:via-orange-400 hover:to-orange-200 hover:text-white"
+      >
+        <span className={`${geistMono.className}`}>
+          AI
+          <br />
+          Review
+        </span>
+      </Link>
       <div className="mb-10 grid h-20 min-w-full grid-cols-3 rounded-b-md bg-gradient-to-br from-sky-500 via-blue-300 to-cyan-300 shadow-lg shadow-sky-200">
         <Link className="w-24 p-4" href="/">
           <svg
