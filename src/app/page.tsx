@@ -8,6 +8,7 @@ import svg_github from "@/public/icons/github.svg";
 import svg_gmail from "@/public/icons/gmail.svg";
 import svg_telegram from "@/public/icons/telegram.svg";
 import svg_facebook from "@/public/icons/facebook.svg";
+import SignIn_btn from "@/components/ui/signin_btn";
 
 const sinera = localFont({
   src: "./fonts/Sinera.woff",
@@ -33,7 +34,7 @@ const Roboto = localFont({
 
 export default function Home() {
   return (
-    <div className="flex flex-col items-center justify-center">
+    <div className="flex select-none flex-col items-center justify-center">
       <div className="absolute top-0 max-h-[20rem] w-full overflow-hidden xl:min-h-[30rem]">
         <Image
           className="z-10 m-0 min-w-full animate-pulse p-0 opacity-20 transition-all delay-300 ease-in-out"
@@ -74,35 +75,11 @@ export default function Home() {
           alt=""
         />
         <div className="flex min-w-full flex-row items-center justify-center gap-[10dvw]">
-          <Link
-            className="group/icon flex flex-col items-center justify-center rounded-md border border-teal-300 bg-emerald-500 bg-gradient-to-t p-3 text-xl shadow-lg shadow-green-300 transition-all hover:from-teal-400 hover:to-emerald-300 hover:shadow-xl hover:shadow-teal-400"
-            href="#"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="32"
-              height="32"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              className="lucide lucide-circle-user-round stroke-white transition-all group-hover/icon:scale-125 group-hover/icon:stroke-teal-600"
-            >
-              <title>Sign In</title>
-              <path d="M18 20a6 6 0 0 0-12 0" />
-              <circle cx="12" cy="10" r="4" />
-              <circle cx="12" cy="12" r="10" />
-            </svg>
-            <span className="font-mono font-[600] text-white transition-all group-hover/icon:text-teal-600">
-              Sign In
-            </span>
-          </Link>
+          <SignIn_btn />
 
           <Link
             className="group/icon flex flex-col items-center justify-center rounded-md border border-amber-300 bg-orange-400 bg-gradient-to-t p-3 text-xl shadow-lg shadow-amber-200 transition-all hover:from-amber-400 hover:to-yellow-300 hover:shadow-xl hover:shadow-orange-400"
-            href="#"
+            href="/product"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -166,9 +143,10 @@ export default function Home() {
         </div>
       </div>
 
-      <div className="group/timeline mb-36 flex w-96 flex-col items-center justify-center rounded-xl bg-gradient-to-br from-cyan-500 via-sky-300 to-blue-400 transition-all">
+      <div className="group/timeline mb-36 flex w-96 flex-col items-center justify-center overflow-hidden rounded-xl bg-gradient-to-br from-cyan-500 via-sky-300 to-blue-400 transition-all">
+        <div className="absolute z-30 min-h-full w-96 bg-black bg-opacity-0" />
         <div
-          className={`flex w-full scale-[.993] flex-col justify-items-center gap-y-5 rounded-xl bg-slate-200 px-10 pb-5 text-center text-black transition-all${geistMono.className}`}
+          className={`flex w-full scale-[.993] flex-col justify-items-center gap-y-5 rounded-xl bg-slate-200 px-10 pb-5 text-center text-black transition-all ${geistMono.className}`}
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -288,8 +266,8 @@ export default function Home() {
               </p>
             </Link>
             <Link
-              href={"#"}
-              target={"#"}
+              href="https://github.com/KS-Arafat/AI-Reviewer"
+              target="_blank"
               className="flex h-16 w-16 flex-col items-center rounded-full hover:bg-white"
             >
               <Image
@@ -306,9 +284,7 @@ export default function Home() {
               </p>
             </Link>
             <Link
-              href={
-                "https://mail.google.com/mail/?view=cm&fs=1&tf=1&to=kazi.arafat01@northsouth.edu&su=Inquiry%20About%20Your%20Project"
-              }
+              href="https://mail.google.com/mail/?view=cm&fs=1&tf=1&to=kazi.arafat01@northsouth.edu&su=Inquiry%20About%20Your%20Project"
               target="_blank"
               className="flex h-16 w-16 flex-col items-center rounded-full hover:bg-red-600"
             >
@@ -326,8 +302,8 @@ export default function Home() {
               </p>
             </Link>
             <Link
-              href={"https://t.me/KS_Arafat"}
-              target={"https://t.me/KS_Arafat"}
+              href="https://t.me/KS_Arafat"
+              target="https://t.me/KS_Arafat"
               className="flex h-16 w-16 flex-col items-center rounded-full hover:bg-sky-500"
             >
               <Image
