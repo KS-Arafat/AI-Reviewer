@@ -4,13 +4,52 @@ import {
   Dialog,
   DialogContent,
   DialogHeader,
+  DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { type FormEvent, useState } from "react";
 
 const SignIn_btn = () => {
+  const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
   const [haveAccount, setAccount] = useState<boolean>(true);
+  const FormHandler = async (e: FormEvent) => {
+    e.preventDefault();
+
+    const target = e.target as HTMLElement;
+    const email = (target.querySelector("#email") as HTMLInputElement)?.value;
+    const password = (target.querySelector("#password") as HTMLInputElement)
+      ?.value;
+    const repassword = (target.querySelector("#repassword") as HTMLInputElement)
+      ?.value;
+
+    console.log(email, password, repassword);
+    const request_body = JSON.stringify(
+      haveAccount
+        ? {
+            email: email,
+            pwd: password,
+            account: haveAccount,
+          }
+        : {
+            email: email,
+            pwd: password,
+            repwd: repassword,
+            account: haveAccount,
+          },
+    );
+    const response = await fetch("/api/auth", {
+      method: "post",
+      body: request_body,
+    });
+    const data = await response.json();
+    if (data.status === 400) alert("Bad Request");
+    else if (data.status === 201) alert("Sign Up Successful");
+    else if (data.status === 404) alert("User Not Found");
+    else if (data.status === 200) router.push("/admin");
+  };
+
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
@@ -40,7 +79,15 @@ const SignIn_btn = () => {
           </span>
         </button>
       </DialogTrigger>
-      <DialogContent className="bg-slate-400">
+      <DialogContent className="bg-slate-400" aria-describedby="info">
+        <DialogTitle>
+          <span
+            id="info"
+            className="to bg-gradient-to-tr from-cyan-300 via-emerald-300 to-amber-300 bg-clip-text text-transparent"
+          >
+            {"Sign In/Up"}
+          </span>
+        </DialogTitle>
         <DialogHeader>
           <div className="flex min-w-full flex-col items-center justify-center">
             <span className="bg-gradient-to-br from-blue-200 via-sky-300 to-cyan-200 bg-clip-text text-2xl font-semibold text-transparent">
@@ -48,7 +95,10 @@ const SignIn_btn = () => {
             </span>
           </div>
         </DialogHeader>
-        <form className="flex min-w-72 flex-col items-center justify-start gap-2 gap-y-5 text-lg">
+        <form
+          className="flex min-w-72 flex-col items-center justify-start gap-2 gap-y-5 text-lg"
+          onSubmit={FormHandler}
+        >
           <div className="relative h-11 w-full min-w-[200px]">
             <input
               className="border-blue-gray-200 text-blue-gray-700 placeholder-shown:border-blue-gray-200 placeholder-shown:border-t-blue-gray-200 disabled:bg-blue-gray-50 peer h-full w-full cursor-default rounded-md border border-t-transparent bg-transparent px-3 py-3 font-sans text-sm font-normal outline outline-0 transition-all placeholder-shown:border focus:border-2 focus:border-sky-300 focus:border-t-transparent focus:shadow-lg focus:shadow-cyan-200 focus:outline-0 disabled:border-0"
@@ -100,7 +150,7 @@ const SignIn_btn = () => {
           <div>
             <button
               type="submit"
-              className="text-md mt-5 flex w-full justify-center rounded-md border-b border-cyan-100 bg-indigo-500 p-8 px-3 py-1.5 font-semibold leading-6 text-white shadow-sm transition-all hover:bg-indigo-500 hover:text-indigo-800 hover:shadow-lg hover:shadow-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+              className="text-md mt-5 flex w-full justify-center rounded-md border-b border-cyan-100 bg-indigo-500 p-8 px-3 py-1.5 font-semibold leading-6 text-white shadow-sm transition-all hover:bg-indigo-500 hover:text-indigo-800 hover:shadow-lg hover:shadow-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:opacity-50"
             >
               {haveAccount ? "Sign in" : "Sign up"}
             </button>
