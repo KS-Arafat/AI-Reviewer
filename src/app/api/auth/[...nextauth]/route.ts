@@ -5,7 +5,7 @@ import CredentialsProvider from "next-auth/providers/credentials";
 const authConfig: AuthOptions = {
   providers: [
     CredentialsProvider({
-      name: "Sign in",
+      name: "Email",
       credentials: {
         email: {
           label: "Email",
@@ -18,7 +18,7 @@ const authConfig: AuthOptions = {
           return null;
 
         const dbUser = {
-          id: Math.random(),
+          id: "5",
           password: "test",
           email: "t@t",
           createdAt: "19/02/2024",
@@ -28,8 +28,11 @@ const authConfig: AuthOptions = {
         //We are going to use a simple === operator
         //In production DB, passwords should be encrypted using something like bcrypt...
         if (dbUser && dbUser.password === credentials.password) {
-          const { password, createdAt, id, ...dbUserWithoutPassword } = dbUser;
-          return dbUserWithoutPassword as User;
+          const dbUserWithoutPassword: User = {
+            id: dbUser.id,
+            email: dbUser.email,
+          };
+          return dbUserWithoutPassword;
         }
 
         return null;
@@ -41,6 +44,7 @@ const authConfig: AuthOptions = {
       clientSecret: `${process.env.GOOGLE_CLIENT_SECRET}`,
     }),
   ],
+  secret: process.env.NEXTAUTH_SECRET,
 };
 
 const handler = NextAuth(authConfig);

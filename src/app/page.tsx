@@ -7,7 +7,7 @@ import svg_github from "@/public/icons/github.svg";
 import svg_gmail from "@/public/icons/gmail.svg";
 import svg_telegram from "@/public/icons/telegram.svg";
 import svg_facebook from "@/public/icons/facebook.svg";
-import SignIn_btn from "@/components/signin_btn";
+import SignIn_btn from "@/components/SigninBtn";
 import { geistMono, geistSans, roboto, sinera } from "./fontProvider";
 
 export default function Home() {

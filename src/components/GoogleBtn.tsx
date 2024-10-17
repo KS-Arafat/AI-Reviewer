@@ -6,7 +6,8 @@ import { signIn } from "next-auth/react";
 const GoolgeAuth = () => {
   signIn("google", {
     redirect: false,
-  });
+    callbackUrl: "/admin",
+  }).catch(() => {});
 };
 
 const GoogleBtn = () => {
