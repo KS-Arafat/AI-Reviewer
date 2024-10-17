@@ -1,4 +1,5 @@
 "use client";
+import { signIn } from "next-auth/react";
 
 import {
   Dialog,
@@ -9,11 +10,13 @@ import {
 } from "@/components/ui/dialog";
 import { useRouter } from "next/navigation";
 import { type FormEvent, useState } from "react";
+import GoogleBtn from "@/components/GoogleBtn";
 
 const SignIn_btn = () => {
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
   const [haveAccount, setAccount] = useState<boolean>(true);
+
   const FormHandler = async (e: FormEvent) => {
     e.preventDefault();
 
@@ -24,30 +27,35 @@ const SignIn_btn = () => {
     const repassword = (target.querySelector("#repassword") as HTMLInputElement)
       ?.value;
 
-    console.log(email, password, repassword);
-    const request_body = JSON.stringify(
-      haveAccount
-        ? {
-            email: email,
-            pwd: password,
-            account: haveAccount,
-          }
-        : {
-            email: email,
-            pwd: password,
-            repwd: repassword,
-            account: haveAccount,
-          },
-    );
-    const response = await fetch("/api/auth", {
-      method: "post",
-      body: request_body,
-    });
-    const data = await response.json();
-    if (data.status === 400) alert("Bad Request");
-    else if (data.status === 201) alert("Sign Up Successful");
-    else if (data.status === 404) alert("User Not Found");
-    else if (data.status === 200) router.push("/admin");
+    if (!haveAccount && password === repassword) {
+      const request_body = JSON.stringify({
+        email: email,
+        pwd: password,
+        repwd: repassword,
+        account: haveAccount,
+      });
+      const response = await fetch("/api/auth", {
+        method: "post",
+        body: request_body,
+      });
+      const data = await response.json();
+
+      if (data.status === 400) alert("Bad Request");
+      else if (data.status === 201) alert("Sign Up Successful");
+    } else {
+      const signInResponse = await signIn("credentials", {
+        email: email,
+        password: password,
+        redirect: false,
+      });
+      console.log(signInResponse);
+      if (signInResponse && !signInResponse.error) {
+        router.push("/admin");
+      } else {
+        console.log("Error: ", signInResponse);
+        alert("Your Email or Password is wrong!");
+      }
+    }
   };
 
   return (
@@ -83,15 +91,15 @@ const SignIn_btn = () => {
         <DialogTitle>
           <span
             id="info"
-            className="to bg-gradient-to-tr from-cyan-300 via-emerald-300 to-amber-300 bg-clip-text text-transparent"
+            className="to bg-gradient-to-tr from-cyan-300 via-emerald-300 to-amber-300 bg-clip-text text-3xl text-transparent"
           >
-            {"Sign In/Up"}
+            {"Welcome"}
           </span>
         </DialogTitle>
         <DialogHeader>
           <div className="flex min-w-full flex-col items-center justify-center">
-            <span className="bg-gradient-to-br from-blue-200 via-sky-300 to-cyan-200 bg-clip-text text-2xl font-semibold text-transparent">
-              Welcome
+            <span className="bg-gradient-to-br from-blue-200 via-sky-300 to-cyan-200 bg-clip-text text-xl font-semibold text-transparent">
+              {haveAccount ? "Sign In With Email" : "Sign Up With Email"}
             </span>
           </div>
         </DialogHeader>
@@ -150,13 +158,13 @@ const SignIn_btn = () => {
           <div>
             <button
               type="submit"
-              className="text-md mt-5 flex w-full justify-center rounded-md border-b border-cyan-100 bg-indigo-500 p-8 px-3 py-1.5 font-semibold leading-6 text-white shadow-sm transition-all hover:bg-indigo-500 hover:text-indigo-800 hover:shadow-lg hover:shadow-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:opacity-50"
+              className="text-md mt-5 flex w-full justify-center rounded-md border-b border-transparent bg-indigo-500 p-8 px-3 py-1.5 font-semibold leading-6 text-white shadow-sm transition-all hover:border-cyan-100 hover:bg-indigo-400 hover:px-4 hover:tracking-wide hover:text-indigo-800 hover:shadow-lg hover:shadow-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:opacity-50"
             >
               {haveAccount ? "Sign in" : "Sign up"}
             </button>
           </div>
           <button
-            className="text-sm font-bold text-blue-200 transition-all hover:underline"
+            className="text-base font-bold text-blue-200 transition-all hover:text-cyan-100 hover:underline"
             type="button"
             onClick={() => setAccount(!haveAccount)}
           >
@@ -165,6 +173,14 @@ const SignIn_btn = () => {
               : "Already have an Account?"}
           </button>
         </form>
+        <div className="flex min-w-full flex-col items-center justify-center">
+          <div className="mt-5 flex h-1 min-w-full flex-col items-center justify-center rounded-full bg-gradient-to-l from-sky-300 from-5% via-transparent via-50% to-sky-300 to-95% text-center">
+            <span className="w-8 select-none bg-slate-400 font-semibold text-blue-300">
+              or
+            </span>
+          </div>
+          <GoogleBtn />
+        </div>
       </DialogContent>
     </Dialog>
   );
