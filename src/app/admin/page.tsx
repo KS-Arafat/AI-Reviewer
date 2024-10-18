@@ -4,11 +4,23 @@ import ProductList from "@/components/ProductList";
 import { Suspense } from "react";
 import Loading from "./loading";
 import ProductUpload from "@/components/ProductUpload";
+import { getServerSession } from "next-auth";
+import authOpts from "@/lib/authOptions";
+import { redirect } from "next/navigation";
+import { signOut } from "next-auth/react";
+import ProfileDropDown from "@/components/ProfileDropDown";
 
-const Admin = () => {
+const Admin = async () => {
+  const session = await getServerSession(authOpts);
+  if (!session?.user?.email) {
+    await signOut();
+    redirect("/");
+  }
+  const email = session.user.email;
+
   return (
     <div className="flex flex-col items-center">
-      <div className="mb-10 grid h-20 min-w-full grid-cols-3 rounded-b-md bg-gradient-to-br from-sky-500 via-blue-300 to-cyan-300 shadow-lg shadow-sky-200">
+      <div className="relative z-10 mb-10 grid h-20 min-w-full grid-cols-3 rounded-b-md bg-gradient-to-br from-sky-500 via-blue-300 to-cyan-300 shadow-lg shadow-sky-200">
         <Link className="w-24 p-4" href="/">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -29,30 +41,11 @@ const Admin = () => {
         </Link>
 
         <span
-          className={`pt-3 text-center text-6xl ${mistergrape.className} from-yellow-300 via-orange-400 to-amber-500 bg-clip-text transition-all hover:bg-gradient-to-br hover:text-transparent`}
+          className={`pt-3 text-center text-6xl ${mistergrape.className} min-w-full from-yellow-300 via-orange-400 to-amber-500 bg-clip-text transition-all hover:bg-gradient-to-br hover:text-transparent`}
         >
           Admin Dashboard
         </span>
-        <div className="flex flex-row items-end justify-end p-4">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            className="lucide lucide-user-round-search relative right-0 h-12 w-12"
-          >
-            <title>Profile</title>
-            <circle cx="10" cy="8" r="5" />
-            <path d="M2 21a8 8 0 0 1 10.434-7.62" />
-            <circle cx="18" cy="18" r="3" />
-            <path d="m22 22-1.9-1.9" />
-          </svg>
-        </div>
+        <ProfileDropDown email={email} />
       </div>
       <div className="container mb-10">
         <table className="min-w-full rounded-lg bg-white shadow-md">

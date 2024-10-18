@@ -3,11 +3,15 @@
 import { geistMono } from "@/app/fontProvider";
 import { signIn } from "next-auth/react";
 
-const GoolgeAuth = () => {
-  signIn("google", {
-    redirect: false,
-    callbackUrl: "/admin",
-  }).catch(() => {});
+const GoolgeAuth = async () => {
+  try {
+    await signIn("google", {
+      redirect: false,
+      callbackUrl: "/admin",
+    });
+  } catch (error) {
+    console.error(error);
+  }
 };
 
 const GoogleBtn = () => {
