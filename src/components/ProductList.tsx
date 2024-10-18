@@ -5,8 +5,6 @@ type productType = {
 };
 
 const ProductList = async () => {
-  console.log("Product API");
-
   const res = await fetch("http://localhost:3000/api/products");
   const productList: productType[] = await res.json();
 
