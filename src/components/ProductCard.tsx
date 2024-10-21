@@ -5,16 +5,9 @@ import Image from "next/image";
 import { motion } from "framer-motion";
 import { Card, CardContent } from "@/components/ui/card";
 import Link from "next/link";
+import type { productType } from "@/lib/types";
 
-interface Product {
-  id: number;
-  name: string;
-  price: number;
-  description: string;
-  image: string;
-}
-
-const ProductCard = ({ product }: { product: Product }) => {
+const ProductCard = ({ product }: { product: productType }) => {
   const [isHovered, setIsHovered] = useState(false);
 
   return (
@@ -26,7 +19,7 @@ const ProductCard = ({ product }: { product: Product }) => {
       <Link href={`/${product.id}/feedback`}>
         <CardContent className="relative p-0">
           <Image
-            src={product.image}
+            src={`/products/product_0${(product.id % 5) + 1}.webp`}
             alt={product.name}
             width={400}
             height={400}

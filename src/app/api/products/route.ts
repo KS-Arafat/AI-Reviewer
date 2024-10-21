@@ -1,38 +1,31 @@
-import { NextResponse } from "next/server";
-type productType = {
-  name: string;
-  feedbacks: number;
-  date: string;
+import { Product, type SelectProduct } from "@/drizzle/schema";
+import { db } from "@/lib/db";
+import type { productType } from "@/lib/types";
+import { eq } from "drizzle-orm";
+import { type NextRequest, NextResponse } from "next/server";
+
+const GET = async (req: NextRequest) => {
+  const products: productType[] = [];
+  let ddata: SelectProduct[] = [];
+
+  const email = req.headers.get("Email");
+  if (email)
+    ddata = await db.select().from(Product).where(eq(Product.Seller, email));
+  else ddata = await db.select().from(Product);
+
+  for (const d of ddata) {
+    products.push({
+      id: Number.parseInt(`${d.ProductID}`),
+      name: d.ProductName,
+      date: `${d.Date}`,
+      feedbacks: 1,
+      price: Number.parseFloat(d.Price),
+      description: d.ProductDesc,
+      image: `/products/product_0${d.ProductID ? (d.ProductID % 5) + 1 : 1}.webp`,
+    });
+  }
+
+  return NextResponse.json(products satisfies productType[]);
 };
-
-const products: productType[] = [
-  {
-    name: "Wireless Mouse",
-    feedbacks: 120,
-    date: "2023-10-01",
-  },
-  {
-    name: "Bluetooth Speaker",
-    feedbacks: 85,
-    date: "2023-09-15",
-  },
-  {
-    name: "Laptop Stand",
-    feedbacks: 210,
-    date: "2023-08-20",
-  },
-  {
-    name: "USB-C Hub",
-    feedbacks: 60,
-    date: "2023-07-05",
-  },
-  {
-    name: "Gaming Keyboard",
-    feedbacks: 150,
-    date: "2023-06-25",
-  },
-];
-
-const GET = async () => NextResponse.json(products);
 
 export { GET };

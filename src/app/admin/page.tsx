@@ -57,7 +57,7 @@ const Admin = async () => {
                 <th className="px-6 py-3 text-center">Date</th>
               </tr>
             </thead>
-            <ProductList />
+            <ProductList email={email} />
           </table>
         </div>
       </Suspense>

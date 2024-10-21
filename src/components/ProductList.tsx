@@ -4,17 +4,21 @@ type productType = {
   date: string;
 };
 
-const ProductList = async () => {
+const ProductList = async ({ email }: { email: string }) => {
   const res = await fetch("http://localhost:3000/api/products", {
     next: {
       tags: ["productlist"],
+    },
+    headers: {
+      "Content-Type": "application/json",
+      Email: email,
     },
   });
   const productList: productType[] = await res.json();
 
   return (
     <tbody>
-      {productList?.map((e) => (
+      {productList.map((e) => (
         <tr
           key={Math.random()}
           className="border-b text-center hover:bg-gray-50"

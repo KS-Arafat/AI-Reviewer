@@ -1,41 +1,20 @@
 import Link from "next/link";
 import ProductCard from "@/components/ProductCard";
 import { mistergrape } from "../fontProvider";
+import type { productType } from "@/lib/types";
 
-interface Product {
-  id: number;
-  name: string;
-  price: number;
-  description: string;
-  image: string;
-}
+const ProductGrid = async () => {
+  let products: productType[] = [];
+  try {
+    const res = await fetch("http://localhost:3000/api/products", {
+      cache: "no-store",
+    });
+    if (!res.ok) throw new Error("Error Fetching Data");
+    products = await res.json();
+  } catch (error) {
+    console.log(error);
+  }
 
-const products: Product[] = [
-  {
-    id: 2,
-    name: "Iphone",
-    price: 99.99,
-    description: "Over Priced Trash Phone",
-    image: "/products/product_02.webp",
-  },
-
-  {
-    id: 4,
-    name: "Tablet",
-    price: 99.99,
-    description: "Some brand of Ipad",
-    image: "/products/product_04.webp",
-  },
-  {
-    id: 5,
-    name: "Apple Watch",
-    price: 99.99,
-    description: "Electronic Waste",
-    image: "/products/product_05.webp",
-  },
-];
-
-const ProductGrid = () => {
   return (
     <div className="">
       <div className="grid h-20 min-w-full grid-cols-3 rounded-b-md bg-gradient-to-br from-sky-500 via-blue-300 to-cyan-300 shadow-lg shadow-sky-200">

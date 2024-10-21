@@ -11,6 +11,7 @@ export const Product = pgTable("products", {
   id: serial("ID").primaryKey(),
   ProductID: integer("PID").unique(),
   ProductName: text("Product").notNull(),
+  ProductDesc: text("Description").notNull(),
   Price: decimal("Price").notNull(),
   Seller: text("Seller").notNull(),
   Date: date("Upload Date").defaultNow(),

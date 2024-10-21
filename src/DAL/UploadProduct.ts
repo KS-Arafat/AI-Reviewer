@@ -31,13 +31,13 @@ const UploadProduct = async (data: FormData) => {
 
   if (!productName || !productDescription || !productPrice || !productImage)
     return;
-  console.log(productName, productDescription, productPrice);
 
   await db.insert(Product).values({
+    ProductID: generateProductID(),
     ProductName: productName.toString(),
+    ProductDesc: productDescription.toString(),
     Price: productPrice.toString(),
     Seller: uemail,
-    ProductID: generateProductID(),
   });
   revalidateTag("productlist");
   redirect("/");
