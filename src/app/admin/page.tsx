@@ -47,20 +47,20 @@ const Admin = async () => {
         </span>
         <ProfileDropDown email={email} />
       </div>
-      <div className="container mb-10">
-        <table className="min-w-full rounded-lg bg-white shadow-md">
-          <thead>
-            <tr className="bg-indigo-500 text-white">
-              <th className="px-6 py-3 text-center">Product</th>
-              <th className="px-6 py-3 text-center">Feedbacks</th>
-              <th className="px-6 py-3 text-center">Date</th>
-            </tr>
-          </thead>
-          <Suspense fallback={<Loading />}>
+      <Suspense fallback={<Loading />}>
+        <div className="container mb-10">
+          <table className="min-w-full rounded-lg bg-white shadow-md">
+            <thead>
+              <tr className="bg-indigo-500 text-white">
+                <th className="px-6 py-3 text-center">Product</th>
+                <th className="px-6 py-3 text-center">Feedbacks</th>
+                <th className="px-6 py-3 text-center">Date</th>
+              </tr>
+            </thead>
             <ProductList />
-          </Suspense>
-        </table>
-      </div>
+          </table>
+        </div>
+      </Suspense>
       <div className="container">
         <ProductUpload />
       </div>
