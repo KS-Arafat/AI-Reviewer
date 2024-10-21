@@ -7,9 +7,9 @@ import {
   integer,
 } from "drizzle-orm/pg-core";
 
-export const product = pgTable("products", {
+export const Product = pgTable("products", {
   id: serial("ID").primaryKey(),
-  PrductID: integer("PID").unique(),
+  ProductID: integer("PID").unique(),
   ProductName: text("Product").notNull(),
   Price: decimal("Price").notNull(),
   Seller: text("Seller").notNull(),
@@ -18,7 +18,13 @@ export const product = pgTable("products", {
 
 export const Feedbacks = pgTable("feedbacks", {
   id: serial("ID").primaryKey(),
-  PrductID: integer("PID").unique(),
+  ProductID: integer("PID").unique(),
   feedback: text("Feedback").notNull(),
   Date: date("Date").defaultNow(),
 });
+
+export type InsertProduct = typeof Product.$inferInsert;
+export type SelectProduct = typeof Product.$inferSelect;
+
+export type InsertComment = typeof Feedbacks.$inferInsert;
+export type SelectComment = typeof Feedbacks.$inferSelect;
