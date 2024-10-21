@@ -19,13 +19,14 @@ export const Product = pgTable("products", {
 
 export const Feedbacks = pgTable("feedbacks", {
   id: serial("ID").primaryKey(),
-  ProductID: integer("PID").unique(),
+  ProductID: integer("PID"),
+  name: text("Name").notNull(),
   feedback: text("Feedback").notNull(),
-  Date: date("Date").defaultNow(),
+  Date: text("Date").notNull(),
 });
 
 export type InsertProduct = typeof Product.$inferInsert;
 export type SelectProduct = typeof Product.$inferSelect;
 
-export type InsertComment = typeof Feedbacks.$inferInsert;
-export type SelectComment = typeof Feedbacks.$inferSelect;
+export type InsertFeedbacks = typeof Feedbacks.$inferInsert;
+export type SelectFeedbacks = typeof Feedbacks.$inferSelect;

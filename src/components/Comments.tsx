@@ -1,50 +1,40 @@
 "use client";
 
+import type { InsertFeedbacks } from "@/drizzle/schema";
+import type { CommentType } from "@/lib/types";
 import { useState } from "react";
 
-interface Comment {
-  id: number;
-  username: string;
-  content: string;
-  timestamp: string;
-}
+const CommentSection = ({
+  PID,
+  storedComments,
+}: {
+  PID: number;
+  storedComments: CommentType[];
+}) => {
+  const [comments, setComments] = useState<CommentType[]>(storedComments);
+  const [newComment, setNewComment] = useState({ name: "", feedback: "" });
 
-const initialComments: Comment[] = [
-  {
-    id: 1,
-    username: "Alice",
-    content: "Great post! Really enjoyed reading it.",
-    timestamp: "2023-06-15 10:30 AM",
-  },
-  {
-    id: 2,
-    username: "Bob",
-    content: "I have a question about the third point. Can you elaborate?",
-    timestamp: "2023-06-15 11:45 AM",
-  },
-  {
-    id: 3,
-    username: "Charlie",
-    content: "This is exactly what I was looking for. Thanks for sharing!",
-    timestamp: "2023-06-15 02:15 PM",
-  },
-];
-
-const Comments = () => {
-  const [comments, setComments] = useState<Comment[]>(initialComments);
-  const [newComment, setNewComment] = useState({ username: "", content: "" });
-
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (newComment.username.trim() && newComment.content.trim()) {
+    if (newComment.name.trim() && newComment.feedback.trim()) {
       const timestamp = new Date().toLocaleString();
-      setComments([{ ...newComment, id: Date.now(), timestamp }, ...comments]);
-      setNewComment({ username: "", content: "" });
+      const Comment = { ...newComment, id: Date.now(), Date: timestamp };
+      const res = await fetch("/api/feedbacks", {
+        method: "post",
+        body: JSON.stringify({
+          feedback: Comment.feedback,
+          name: Comment.name,
+          Date: Comment.Date,
+          ProductID: PID,
+        } as InsertFeedbacks),
+      });
+      if (res.status === 200) setComments([Comment, ...comments]);
+      setNewComment({ name: "", feedback: "" });
     }
   };
 
   return (
-    <div className="flex min-h-screen flex-col">
+    <div className="container z-10 flex min-h-screen flex-col">
       <div className="flex-grow overflow-y-auto p-4 md:p-6">
         <h2 className="mb-4 w-full border-b border-cyan-400 text-2xl font-bold text-sky-600">
           Comments
@@ -55,9 +45,10 @@ const Comments = () => {
               <input
                 type="text"
                 id="username"
-                value={newComment.username}
+                name="username"
+                value={newComment.name}
                 onChange={(e) =>
-                  setNewComment({ ...newComment, username: e.target.value })
+                  setNewComment({ ...newComment, name: e.target.value })
                 }
                 className="w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 placeholder="Enter your username"
@@ -67,9 +58,10 @@ const Comments = () => {
             <div>
               <textarea
                 id="comment"
-                value={newComment.content}
+                name="comment"
+                value={newComment.feedback}
                 onChange={(e) =>
-                  setNewComment({ ...newComment, content: e.target.value })
+                  setNewComment({ ...newComment, feedback: e.target.value })
                 }
                 className="w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 rows={3}
@@ -92,12 +84,10 @@ const Comments = () => {
               className="rounded-lg bg-gray-100 p-4 drop-shadow-md"
             >
               <div className="mb-2 flex items-start justify-between">
-                <span className="font-semibold">{comment.username}</span>
-                <span className="text-sm text-gray-500">
-                  {comment.timestamp}
-                </span>
+                <span className="font-semibold">{comment.name}</span>
+                <span className="text-sm text-gray-500">{comment.Date}</span>
               </div>
-              <p className="text-gray-700">{comment.content}</p>
+              <p className="text-gray-700">{comment.feedback}</p>
             </div>
           ))}
         </div>
@@ -105,4 +95,4 @@ const Comments = () => {
     </div>
   );
 };
-export default Comments;
+export default CommentSection;

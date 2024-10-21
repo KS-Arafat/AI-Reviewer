@@ -7,3 +7,10 @@ export type productType = {
   description: string;
   image: string;
 };
+
+export type CommentType = {
+  id: number;
+  name: string;
+  feedback: string;
+  Date: string;
+};

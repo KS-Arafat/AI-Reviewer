@@ -1,43 +1,41 @@
 import { geistMono, mistergrape, sinera } from "@/app/fontProvider";
-import Comments from "@/components/Comments";
+import CommentSection from "@/components/Comments";
+import { redirect } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
+import type { CommentType, productType } from "@/lib/types";
 
-const products = [
-  {
-    id: 2,
-    name: "Iphone",
-    price: 99.99,
-    description: "Over Priced Trash Phone",
-    image: "/products/product_02.webp",
-  },
+const Feedbacks = async ({ params }: { params: { slug: string } }) => {
+  let itemID = 0;
+  let itemData: productType;
+  let prevComments: CommentType[];
+  try {
+    itemID = Number.parseInt(params.slug);
+    const res1 = await fetch("http://localhost:3000/api/feedbacks", {
+      headers: {
+        itemID: itemID.toString(),
+      },
+      cache: "no-store",
+    });
+    const res2 = await fetch("http://localhost:3000/api/commentprovider", {
+      headers: {
+        itemID: itemID.toString(),
+      },
+      cache: "no-store",
+    });
 
-  {
-    id: 4,
-    name: "Tablet",
-    price: 99.99,
-    description: "Some brand of Ipad",
-    image: "/products/product_04.webp",
-  },
-  {
-    id: 5,
-    name: "Apple Watch",
-    price: 99.99,
-    description: "Electronic Waste",
-    image: "/products/product_05.webp",
-  },
-];
-
-const Feedbacks = ({ params }: { params: { slug: string } }) => {
-  const product =
-    products[products.findIndex((v) => v.id.toString() === params.slug)];
-
+    itemData = await res1.json();
+    prevComments = await res2.json();
+  } catch (error) {
+    console.error(error);
+    redirect("/");
+  }
   return (
     <div className="flex flex-col items-center justify-center">
       <Link
         href={`/${params.slug}/aireview`}
-        className="fixed bottom-20 right-20 flex h-24 w-24 flex-col items-center justify-center rounded-full border-b border-r border-orange-300 bg-orange-200 text-center font-bold drop-shadow-xl transition-all hover:bg-gradient-to-br hover:from-orange-300 hover:via-orange-400 hover:to-orange-200 hover:text-white"
+        className="fixed bottom-20 right-20 z-50 flex h-24 w-24 scale-75 flex-col items-center justify-center rounded-full border-b border-r border-transparent bg-[#ccf7ff] text-center font-bold shadow-xl transition-all hover:scale-100 hover:border-orange-200 hover:bg-gradient-to-br hover:from-[#b3ffe5] hover:via-[#b3ffe5] hover:to-[#80ffd5] hover:text-slate-600 hover:shadow-white"
       >
         <span className={`${geistMono.className}`}>
           AI
@@ -94,7 +92,7 @@ const Feedbacks = ({ params }: { params: { slug: string } }) => {
       <div className="mb-10 flex flex-row items-center justify-center gap-10">
         <Image
           className="aspect-auto w-96 rounded-lg"
-          src={product.image}
+          src={`/products/product_0${(itemID % 5) + 1}.webp`}
           width={300}
           height={300}
           alt="Product"
@@ -105,22 +103,22 @@ const Feedbacks = ({ params }: { params: { slug: string } }) => {
           >
             Product Name
           </span>
-          <span className="py-5 text-xl font-bold">{product.name}</span>
+          <span className="py-5 text-xl font-bold">{itemData.name}</span>
           <span
             className={`border-b border-b-cyan-500 text-4xl font-bold text-cyan-500 ${sinera.className}`}
           >
             Product Price
           </span>
-          <span className="py-5 text-xl font-bold">{product.price}$</span>
+          <span className="py-5 text-xl font-bold">{itemData.price}$</span>
           <span
             className={`border-b border-b-cyan-500 text-4xl font-bold text-cyan-500 ${sinera.className}`}
           >
             Description
           </span>
-          <span className="py-5 text-xl font-bold">{product.description}</span>
+          <span className="py-5 text-xl font-bold">{itemData.description}</span>
         </div>
       </div>
-      <Comments />
+      <CommentSection PID={itemID} storedComments={prevComments} />
     </div>
   );
 };
