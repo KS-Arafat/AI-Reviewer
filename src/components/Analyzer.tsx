@@ -4,17 +4,90 @@ import { useEffect, useState } from "react";
 import { Progress } from "./ui/progress";
 import { roboto } from "@/app/fontProvider";
 
-const Analyzer = () => {
-  const [progress, setProgress] = useState(60);
-  const [analyzing, startAnalyzing] = useState<boolean>(false);
+import { LabelList, Pie, PieChart } from "recharts";
 
+import {
+  type ChartConfig,
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
+} from "./ui/chart";
+
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "./ui/card";
+
+const chartConfig = {
+  visitors: {
+    label: "Sentiment",
+  },
+  Positive: {
+    label: "Positive",
+    color: "white",
+  },
+  Negative: {
+    label: "Negative",
+    color: "white",
+  },
+} satisfies ChartConfig;
+
+const Analyzer = ({ PID }: { PID: number }) => {
+  const [progress, setProgress] = useState(60);
+  const [analyzing, startAnalyzing] = useState(false);
+  const [sentiment, setSentiment] = useState({ pos: 0, neg: 0 });
   useEffect(() => {
-    console.log(progress);
-    let timer: NodeJS.Timeout;
-    if (progress < 100 && analyzing) {
-      timer = setTimeout(() => setProgress(progress + 1), 200);
-    } else return () => clearTimeout(timer);
-  }, [progress, analyzing]);
+    const fetchData = async () => {
+      startAnalyzing(true);
+
+      try {
+        const headersList = {
+          Accept: "*/*",
+          "Content-Type": "application/json",
+        };
+
+        const bodyContent = JSON.stringify({
+          PID: PID,
+        });
+
+        const response = await fetch("http://localhost:5000/analyze", {
+          method: "POST",
+          body: bodyContent,
+          headers: headersList,
+        });
+
+        const data: { pos: number; neg: number } = await response.json();
+        setSentiment({ pos: data.pos, neg: data.neg });
+        let currentProgress = progress;
+
+        const interval = setInterval(() => {
+          if (currentProgress < 100) {
+            setProgress((prev) => prev + 1);
+            currentProgress += 1;
+          } else {
+            clearInterval(interval);
+          }
+        }, 200);
+        console.log(data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      } finally {
+        setProgress(100);
+        startAnalyzing(false);
+      }
+    };
+
+    if (analyzing) {
+      fetchData();
+    }
+  });
+  const chartData = [
+    { browser: "Positive", visitors: sentiment.pos, fill: "blue" },
+    { browser: "Negative", visitors: sentiment.neg, fill: "red" },
+  ];
 
   return (
     <div className="flex w-1/3 flex-col items-center justify-center gap-5">
@@ -74,17 +147,41 @@ const Analyzer = () => {
         </div>
       ) : null}
       {progress >= 100 ? (
-        <div className="h-fit w-full rounded-lg border border-purple-300 bg-indigo-200 p-5 drop-shadow-lg">
-          <span className="border-b border-indigo-400 font-mono text-xl text-indigo-500">
-            Analyzed Result
-          </span>
-          <div className="mt-5">
-            Lorem ipsum dolor, sit amet consectetur adipisicing elit. Pariatur
-            fugit dolor odio eum molestias delectus dolore doloremque cupiditate
-            accusantium, atque eaque vero explicabo iusto cum veritatis
-            consectetur natus voluptate in!
-          </div>
-        </div>
+        <Card className="flex flex-col">
+          <CardHeader className="items-center pb-0">
+            <CardTitle>Sentiment Pie Chart</CardTitle>
+            <CardDescription>
+              Neg: {sentiment.neg} <br /> Pos: {sentiment.pos}
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="flex-1 pb-0">
+            <ChartContainer
+              config={chartConfig}
+              className="mx-auto aspect-square max-h-[250px] [&_.recharts-text]:fill-background"
+            >
+              <PieChart>
+                <ChartTooltip
+                  content={<ChartTooltipContent nameKey="visitors" hideLabel />}
+                />
+                <Pie
+                  className="min-w-max text-white"
+                  data={chartData}
+                  dataKey="visitors"
+                >
+                  <LabelList
+                    dataKey="browser"
+                    className="fill-background"
+                    stroke="none"
+                    fontSize={12}
+                    formatter={(value: keyof typeof chartConfig) =>
+                      chartConfig[value]?.label
+                    }
+                  />
+                </Pie>
+              </PieChart>
+            </ChartContainer>
+          </CardContent>
+        </Card>
       ) : null}
     </div>
   );

@@ -166,8 +166,8 @@ export default async function Home() {
             <span className="w-full text-center">
               <input
                 type="checkbox"
-                className="mr-3 scale-125 place-self-end"
-                disabled
+                className="mr-3 scale-125 place-self-end accent-cyan-500"
+                defaultChecked
               />
               Backend Dev & Authentication
             </span>
@@ -175,8 +175,8 @@ export default async function Home() {
             <span className="w-full text-center">
               <input
                 type="checkbox"
-                className="mr-3 scale-125 place-self-end"
-                disabled
+                className="mr-3 scale-125 place-self-end accent-cyan-500"
+                defaultChecked
               />
               Database Design & Backend Connection
             </span>
@@ -184,8 +184,8 @@ export default async function Home() {
             <span className="w-full text-center">
               <input
                 type="checkbox"
-                className="mr-3 scale-125 place-self-end"
-                disabled
+                className="mr-3 scale-125 place-self-end accent-cyan-500"
+                defaultChecked
               />
               Jupyter Server & Model Identification
             </span>
@@ -193,8 +193,8 @@ export default async function Home() {
             <span className="w-full text-center">
               <input
                 type="checkbox"
-                className="mr-3 scale-125 place-self-end"
-                disabled
+                className="mr-3 scale-125 place-self-end accent-cyan-500"
+                defaultChecked
               />
               Tokenizing and Sentiment Analysis
             </span>
@@ -202,26 +202,17 @@ export default async function Home() {
             <span className="w-full text-center">
               <input
                 type="checkbox"
-                className="mr-3 scale-125 place-self-end"
-                disabled
+                className="mr-3 scale-125 place-self-end accent-cyan-500"
+                defaultChecked
               />
-              Summarization
+              Flask Backend Implementation
             </span>
 
             <span className="w-full text-center">
               <input
                 type="checkbox"
-                className="mr-3 scale-125 place-self-end"
-                disabled
-              />
-              Django Implementation
-            </span>
-
-            <span className="w-full text-center">
-              <input
-                type="checkbox"
-                className="mr-3 scale-125 place-self-end"
-                disabled
+                className="mr-3 scale-125 place-self-end accent-cyan-500"
+                defaultChecked
               />
               Testing & Project Finishing
             </span>

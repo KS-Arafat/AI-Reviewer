@@ -1,6 +1,6 @@
 import { mistergrape, roboto } from "@/app/fontProvider";
 import Analyzer from "@/components/Analyzer";
-import Summarizer from "@/components/Summarizer";
+// import Summarizer from "@/components/Summarizer";
 import Link from "next/link";
 import React from "react";
 
@@ -59,14 +59,9 @@ const AiReviewer = ({ params }: { params: { slug: string } }) => {
       >
         Item ID: {item_id}
       </div>
-      <div
-        className={`text-xl font-bold ${roboto.className} mb-10 w-60 text-pretty rounded-xl border border-rose-100 bg-gradient-to-br from-red-500 via-rose-400 to-amber-300 p-4 text-center text-white shadow-lg shadow-rose-200`}
-      >
-        Number of Comments: {5}
-      </div>
+
       <div className="flex w-full flex-row items-start justify-evenly gap-5">
-        <Analyzer />
-        <Summarizer />
+        <Analyzer PID={Number.parseInt(item_id)} />
       </div>
     </div>
   );
